@@ -24,8 +24,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: ✅ Run Tests
-        run: |
-          echo "No tests yet — skipping test phase."
+        run: echo "No tests yet — skipping test phase."
 
       - name: 🐳 Build Docker image
         run: docker build -t todo-app .
@@ -37,6 +36,6 @@ jobs:
           RAILWAY_SERVICE_NAME: ${{ secrets.RAILWAY_SERVICE_NAME }}
         run: |
           npm install -g @railway/cli
-          echo "✅ Using Railway Token Authentication"
+          echo "✅ Deploying to Railway..."
           railway link --project "$RAILWAY_PROJECT_ID"
           railway up --service "$RAILWAY_SERVICE_NAME"
