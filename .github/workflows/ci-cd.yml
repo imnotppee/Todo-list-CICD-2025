@@ -30,22 +30,11 @@ jobs:
       - name: 🐳 Build Docker image
         run: docker build -t todo-app .
 
-      # ---------------- RENDER DEPLOY (optional) ----------------
-      - name: 🚀 Deploy to Render
-        if: always()
-        env:
-          RENDER_TOKEN: ${{ secrets.RENDER_TOKEN }}
-        run: |
-          echo "Render deploy step (placeholder)"
-          # ถ้ามี render.yaml หรือใช้ render CLI ค่อยเพิ่มภายหลัง
-
-      # ---------------- RAILWAY DEPLOY ----------------
       - name: 🚀 Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      
-          run: |
-            npm install -g @railway/cli
-            railway login --token "$RAILWAY_TOKEN"
-            railway link --project "${{ secrets.RAILWAY_PROJECT_ID }}"
-            railway up --service "${{ secrets.RAILWAY_SERVICE_NAME }}"
+        run: |
+          npm install -g @railway/cli
+          railway login --token "$RAILWAY_TOKEN"
+          railway link --project "${{ secrets.RAILWAY_PROJECT_ID }}"
+          railway up --service "${{ secrets.RAILWAY_SERVICE_NAME }}"
