@@ -2242,15 +2242,15 @@ docker-compose up -d
 
 
 1. **Docker Architecture**:
-   - เหตุใดจึงต้องแยก database และ application เป็นคนละ containers ?
-   - Multi-stage build มีประโยชน์อย่างไร?
+   - แยก Database กับ Application ออกเป็นคนละ Container เพื่อให้ แยกการจัดการ ทดแทน และปรับขนาด (scaling) ได้อิสระ ลดผลกระทบเมื่อ service ใด service หนึ่งล่ม
+   - Multi-stage build ช่วยให้ ลดขนาด image และแยกขั้นตอน build กับ runtime ออกจากกัน ทำให้ปลอดภัยและประหยัดทรัพยากร
 
 2. **Testing Strategy**:
-   - การวัด code coverage มีความสำคัญอย่างไร?
+   - Code coverage สำคัญเพราะช่วย วัดสัดส่วนของโค้ดที่ถูกทดสอบ ช่วยหาจุดที่ยังไม่ได้เขียน test และเพิ่มความมั่นใจว่าโปรแกรมทำงานถูกต้อง
 
 3. **Deployment**:
-   - Health check endpoint มีความสำคัญอย่างไร?
-   - Render และ Railway มีความแตกต่างกันอย่่างไร?
+   - Health check endpoint ใช้เพื่อตรวจสอบว่า service พร้อมทำงานหรือไม่ ทำให้ระบบสามารถ restart หรือ load balance ได้อัตโนมัติเมื่อมีปัญหา
+   - Render เป็น PaaS (Platform-as-a-Service) ที่เน้นการ build อัตโนมัติจาก repo ส่วน Railway เป็น developer-friendly DevOps platform ที่รวม CI/CD, DB, และ hosting ในที่เดียว พร้อม “Wait for CI” integration กับ GitHub Actions.
 
 
 ---
