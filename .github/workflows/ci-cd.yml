@@ -33,8 +33,10 @@ jobs:
       - name: 🚀 Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_SERVICE_NAME: ${{ secrets.RAILWAY_SERVICE_NAME }}
         run: |
           npm install -g @railway/cli
-          railway login --token "$RAILWAY_TOKEN"
-          railway link --project "${{ secrets.RAILWAY_PROJECT_ID }}"
-          railway up --service "${{ secrets.RAILWAY_SERVICE_NAME }}"
+          railway auth login --token "$RAILWAY_TOKEN"
+          railway link --project "$RAILWAY_PROJECT_ID"
+          railway up --service "$RAILWAY_SERVICE_NAME"
