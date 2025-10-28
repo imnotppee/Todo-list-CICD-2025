@@ -301,16 +301,24 @@ class TestTodoAPI:
     def test_update_todo_database_error(self, client, app):
         """Test database error during todo update"""
         with app.app_context():
+            # 1️⃣ สร้าง todo ขึ้นมาก่อน
             todo = Todo(title='Test')
             db.session.add(todo)
             db.session.commit()
             todo_id = todo.id
 
+        # 2️⃣ Mock การ commit ภายใน context เดียวกัน
         with patch('app.routes.db.session.commit') as mock_commit:
             mock_commit.side_effect = SQLAlchemyError('Database error')
-            response = client.put(f'/api/todos/{todo_id}', json={'title': 'New'})
-            assert response.status_code == 500
 
+            # 3️⃣ เรียก API เพื่ออัปเดต todo
+            response = client.put(f'/api/todos/{todo_id}', json={'title': 'New'})
+
+            # 4️⃣ ตรวจสอบผลลัพธ์
+            assert response.status_code == 500
+            data = response.get_json()
+            assert data['success'] is False
+            assert 'error' in data
 
     def test_delete_todo(self, client, app):
         """Test deleting a todo"""
