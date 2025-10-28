@@ -6,22 +6,57 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # ---------------------- 🔹 Checkout Repository ----------------------
       - name: 🧩 Checkout repository
         uses: actions/checkout@v4
 
+      # ---------------------- 🔹 Python Setup ----------------------
       - name: 🐍 Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
+      # ---------------------- 🔹 Install Dependencies ----------------------
       - name: 📦 Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # ---------------------- 🔹 Run Tests ----------------------
       - name: ✅ Run Tests
         run: echo "✅ All tests passed!"
+
+      # ---------------------- 🔹 Build Docker Image ----------------------
+      - name: 🐳 Build Docker image
+        run: docker build -t todo-app .
+
+      # ---------------------- 🔹 Deploy to Render ----------------------
+      - name: 🚀 Deploy to Render
+        if: success()
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "🚀 Triggering Render Deploy..."
+            curl -X POST "$RENDER_DEPLOY_HOOK_URL"
+          else
+            echo "⚠️ Render deploy hook URL not set, skipping..."
+          fi
+
+      # ---------------------- 🔹 Deploy to Railway ----------------------
+      - name: 🚄 Deploy to Railway
+        if: success()
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -n "$RAILWAY_TOKEN" ]; then
+            npm install -g @railway/cli
+            echo "✅ Deploying to Railway with project token..."
+            railway up --detach
+          else
+            echo "⚠️ Railway token not found, skipping..."
+          fi
