@@ -47,16 +47,7 @@ jobs:
             echo "⚠️ Render deploy hook URL not set, skipping..."
           fi
 
-      # ---------------------- 🔹 Deploy to Railway ----------------------
-      - name: 🚄 Deploy to Railway
-        if: success()
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      # ---------------------- 🔹 Note for Railway ----------------------
+      - name: 🧠 Note
         run: |
-          if [ -n "$RAILWAY_TOKEN" ]; then
-            npm install -g @railway/cli
-            echo "✅ Deploying to Railway with project token..."
-            railway up --detach
-          else
-            echo "⚠️ Railway token not found, skipping..."
-          fi
+          echo "✅ Railway auto-deploy will trigger after CI passes (Wait for CI is ON)."
