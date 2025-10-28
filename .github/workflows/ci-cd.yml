@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # -------------------- CHECKOUT --------------------
       - name: 🧩 Checkout repository
         uses: actions/checkout@v4
 
-      # -------------------- PYTHON SETUP --------------------
       - name: 🐍 Set up Python
         uses: actions/setup-python@v5
         with:
@@ -28,11 +26,9 @@ jobs:
       - name: ✅ Run Tests
         run: echo "No tests yet — skipping test phase."
 
-      # -------------------- DOCKER BUILD --------------------
       - name: 🐳 Build Docker image
         run: docker build -t todo-app .
 
-      # -------------------- DEPLOY TO RAILWAY --------------------
       - name: 🚀 Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
@@ -44,7 +40,6 @@ jobs:
           railway link --project "$RAILWAY_PROJECT_ID"
           railway up --service "$RAILWAY_SERVICE_ID"
 
-      # -------------------- DEPLOY TO RENDER --------------------
       - name: 🌐 Deploy to Render
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
